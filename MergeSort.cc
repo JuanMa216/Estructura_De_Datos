@@ -14,11 +14,13 @@ void Merge(vector<int>* L, vector<int>* R, vector<int>* A) {
         {
             A->at(k) = L->at(i);
             i++; 
+            k++;
         } else {
             A->at(k) = R->at(j);
             j++;
+            k++;
         }
-    k++;
+    
     }
 
     while (i < nL)
