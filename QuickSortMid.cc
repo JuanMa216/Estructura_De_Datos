@@ -4,27 +4,26 @@
 
 using namespace std;
 
-int Partition(vector<int> &v, int LowIndx, int HighIndx) {
+int Partition(vector<int>* v, int LowIndx, int HighIndx) {
     int pivotIndex = (LowIndx + HighIndx) / 2;
-    int pivot = v.at(pivotIndex);
-    swap(v.at(pivotIndex), v.at(HighIndx)); 
+    int pivot = v->at(pivotIndex);
+    swap(v->at(pivotIndex), v->at(HighIndx)); 
     int i = LowIndx - 1;
     
     for (int j = LowIndx; j < HighIndx; j++) {
-        if (v.at(j) <= pivot) {
+        if (v->at(j) <= pivot) {
             i++;
-            swap(v.at(i), v.at(j));
+            swap(v->at(i), v->at(j));
         } 
     }
     i++;
-    swap(v.at(i), v.at(HighIndx)); 
+    swap(v->at(i), v->at(HighIndx)); 
     
     return i;
 }
 
-void QuickSort(vector<int> &v, int LowIndx, int HighIndx) {
+void QuickSort(vector<int>* v, int LowIndx, int HighIndx) {
     if (HighIndx <= LowIndx) return;
-
     int pivot = Partition(v, LowIndx, HighIndx);
     QuickSort(v, LowIndx, pivot - 1);
     QuickSort(v, pivot + 1, HighIndx);
@@ -45,14 +44,13 @@ vector<int> generateRandomArray(int size) {
 
 int main() {
     cout << "Vector desordenado:" << endl;
-    vector<int> b = generateRandomArray(10);
+    vector<int> b = generateRandomArray(8);
 
     for (int i = 0; i < b.size(); i++) {
         cout << " " << b.at(i);
     }
     cout << endl;
-
-    QuickSort(b, 0, b.size() - 1);
+    QuickSort(&b, 0, b.size() - 1);
 
     cout << "Vector ordenado:" << endl;
     for (int i = 0; i < b.size(); i++) {
