@@ -52,7 +52,7 @@ int main() {
     cout << "QuickSort with a random pivot" << endl;
     vector<int> b;
     cout << "Vector not sorted: " << endl;
-    RandomVector(&b, 0, 10);
+    RandomVector(&b, 0, 20);
 
     for (int i = 0; i < b.size(); i++)
     {
