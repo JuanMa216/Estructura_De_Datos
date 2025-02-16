@@ -8,9 +8,7 @@ using namespace std;
 using namespace chrono;
 
 int Partition(vector<int>& v, int LowIndx, int HighIndx) {
-    int pivotIndex = (LowIndx + HighIndx) / 2;
-    int pivot = v[pivotIndex];
-    swap(v[pivotIndex], v[HighIndx]); 
+    int pivot = v[HighIndx]; // Ahora el pivote es el último elemento
     int i = LowIndx - 1;
     
     for (int j = LowIndx; j < HighIndx; j++) {

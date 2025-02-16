@@ -1,35 +1,51 @@
 #include <iostream>
 #include <vector>
 #include <random>
+#include <chrono>
 #include <cmath>
-#include <chrono> // Librería para medir tiempo
 
 using namespace std;
-using namespace chrono; // Para simplificar la sintaxis
+using namespace chrono; // Para medir el tiempo
 
-int Partition(vector<int>* v, int low, int high) {
-    int pivot = v->at(high), i = low;
+// Función para generar un vector aleatorio de tamaño 'size'
+void RandomVector(vector<int>& v, int size) {
+    random_device rd;
+    mt19937 gen(rd()); // Generador de números aleatorios
+    uniform_int_distribution<> distrib(0, 100); // Rango de valores aleatorios
 
+    v.clear();      // Asegura que el vector esté vacío antes de llenarlo
+    v.reserve(size); // Reserva espacio para evitar realocaciones
+
+    for (int i = 0; i < size; i++) {
+        v.push_back(distrib(gen));
+    }
+}
+
+// Función de partición para QuickSort
+int Partition(vector<int>& v, int low, int high) {
+    int pivot = v[high], i = low;
     for (int j = low; j <= high - 1; j++) {
-        if (v->at(j) <= pivot) {
-            swap(v->at(i), v->at(j));
+        if (v[j] <= pivot) {
+            swap(v[i], v[j]);
             i++;
         }
     }
-    swap(v->at(i), v->at(high));
+    swap(v[i], v[high]);
     return i;
 }
 
-int Random_Indx(vector<int>* v, int low, int high) {
+// Función para seleccionar un pivote aleatorio y particionar
+int Random_Indx(vector<int>& v, int low, int high) {
     random_device rd;
     mt19937 gen(rd());
     uniform_int_distribution<> distrib(low, high);
     int pivot = distrib(gen);
-    swap(v->at(pivot), v->at(high));
+    swap(v[pivot], v[high]);
     return Partition(v, low, high);
 }
 
-void QuickSortRandom(vector<int>* v, int Low, int High) {
+// Implementación de QuickSort con pivote aleatorio
+void QuickSortRandom(vector<int>& v, int Low, int High) {
     if (Low < High) {
         int pivotIndx = Random_Indx(v, Low, High);
         QuickSortRandom(v, Low, pivotIndx - 1);
@@ -37,36 +53,22 @@ void QuickSortRandom(vector<int>* v, int Low, int High) {
     }
 }
 
-void RandomVector(vector<int>* v, int size) {
-    random_device rd;
-    mt19937 gen(rd()); // Generador de números aleatorios
-    uniform_int_distribution<> distrib(0, 100); // Rango de valores aleatorios
-
-    v->clear(); // Asegura que el vector esté vacío antes de llenarlo
-    v->reserve(size); // Reserva espacio para evitar realocaciones
-
-    for (int i = 0; i < size; i++) {
-        v->push_back(distrib(gen));
-    }
-}
-
 int main() {
-    cout << "QuickSort with a random pivot" << endl;
-    vector<int> b;
-    int size = pow(10, 2); // 
+    int size = pow(10,7);  
+    int num_tests = 10; 
+    vector<int> original;  // Vector original
+    RandomVector(original, size);  
 
-    cout << "Generating random vector..." << endl;
-    RandomVector(&b, size);
+    for (int i = 0; i < num_tests; i++) {
+        vector<int> test_vector = original;  // Copiar el vector original para cada prueba
 
-    cout << "Sorting with QuickSort..." << endl;
-    auto start = high_resolution_clock::now(); // Inicio del cronómetro
+        auto start = high_resolution_clock::now();  // Iniciar medición
+        QuickSortRandom(test_vector, 0, test_vector.size() - 1);
+        auto end = high_resolution_clock::now();  // Terminar medición
 
-    QuickSortRandom(&b, 0, b.size() - 1);
-
-    auto end = high_resolution_clock::now(); // Fin del cronómetro
-    double duration = duration_cast<milliseconds>(end - start).count(); // Convertir a ms
-
-    cout << "Sorting completed in " << duration << " ms." << endl;
+        double duration = duration_cast<nanoseconds>(end - start).count() / 1e9; // Segundos
+        cout << "Prueba " << i + 1 << ": " << duration << " s" << endl;
+    }
 
     return 0;
 }
