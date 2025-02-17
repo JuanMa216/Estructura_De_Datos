@@ -61,7 +61,7 @@ int main() {
     auto start = chrono::high_resolution_clock::now();
 
     // Se redujo el rango de potencias para evitar uso excesivo de memoria
-    for (int pot = 8; pot <= 9; pot++) {  // Ahora se usa 10^6 a 10^8 elementos
+    for (int pot = 2; pot <= 8; pot++) {  // Ahora se usa 10^6 a 10^8 elementos
         quantity = pow(10, pot);
         variables.reserve(quantity);
         tiempos << endl << endl << "Potencia " << pot << endl;

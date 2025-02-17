@@ -8,10 +8,10 @@ using namespace std;
 using namespace chrono; // Para medir el tiempo
 
 // Función para generar un vector aleatorio de tamaño 'size'
-void RandomVector(vector<int>& v, int size) {
+void RandomVector(vector<int>& v, int size, long int range) {
     random_device rd;
     mt19937 gen(rd()); // Generador de números aleatorios
-    uniform_int_distribution<> distrib(0, 100); // Rango de valores aleatorios
+    uniform_int_distribution<> distrib(0, range); // Rango de valores aleatorios
 
     v.clear();      // Asegura que el vector esté vacío antes de llenarlo
     v.reserve(size); // Reserva espacio para evitar realocaciones
@@ -54,10 +54,11 @@ void QuickSortRandom(vector<int>& v, int Low, int High) {
 }
 
 int main() {
-    int size = pow(10,7);  
+    int size = pow(10,8); 
+    long int range = pow(10, 10); 
     int num_tests = 10; 
     vector<int> original;  // Vector original
-    RandomVector(original, size);  
+    RandomVector(original, size, range);  
 
     for (int i = 0; i < num_tests; i++) {
         vector<int> test_vector = original;  // Copiar el vector original para cada prueba

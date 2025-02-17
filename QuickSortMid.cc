@@ -32,10 +32,10 @@ void QuickSort(vector<int>& v, int LowIndx, int HighIndx) {
     QuickSort(v, pivot + 1, HighIndx);
 }
 
-vector<int> generateRandomArray(int size) {
+vector<int> generateRandomArray(int size, long int range) {
     random_device rd;
     mt19937 gen(rd());
-    uniform_int_distribution<> distrib(0, 100);
+    uniform_int_distribution<> distrib(0, range);
     
     vector<int> randomArray(size);
     for (int i = 0; i < size; i++) {
@@ -45,10 +45,11 @@ vector<int> generateRandomArray(int size) {
 }
 
 int main() {
-    int size = pow(10,7);  // Tamaño del vector
+    int size = pow(10,9);  // Tamaño del vector
+    long int range = pow(10,9);
     int tests = 10;  // Cantidad de pruebas con el mismo vector
     
-    vector<int> b = generateRandomArray(size);
+    vector<int> b = generateRandomArray(size, range);
     
     //cout << "Vector desordenado:" << endl;
     //for (int num : b) {
