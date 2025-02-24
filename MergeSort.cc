@@ -67,7 +67,7 @@ void RandomVector(vector<int>* v, int size) {
 }
 
 int main() {
-    int size = pow(10,9); // Tamaño del vector
+    int size = pow(10, 9); // Tamaño del vector
     int num_tests = 10;
     vector<int> original;
     RandomVector(&original, size);

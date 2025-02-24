@@ -43,9 +43,9 @@ vector<int> generateRandomArray(int size, long int range) {
 }
 
 int main() {
-    int size = pow(10,2);  // Tamaño del vector
+    int size = pow(10,8);  // Tamaño del vector
     int tests = 10;  // Cantidad de pruebas con el mismo vector
-    long int range = pow(10, 2); 
+    long int range = pow(10, 8); 
     vector<int> b = generateRandomArray(size, range);
     
     //cout << "Vector desordenado:" << endl;
