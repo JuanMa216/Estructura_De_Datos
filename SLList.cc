@@ -157,6 +157,32 @@ public:
         last_ = current; // Actualizamos `last_` al nuevo último nodo.
         size_--; // Reducimos el tamaño de la lista.
     }
+
+    void remove(unsigned int pos) {
+        if(pos >= size_ || first_ == nullptr) return;
+
+        if(pos == 0) {
+            pop_front();
+            return;
+        }
+
+        Node *current = first_;
+        Node *toDelete;
+        for (unsigned int i = 0; i < pos - 1; i++)
+        {
+            current = current->getNext();
+        }
+        toDelete = current->getNext();
+        current->setNext(toDelete->getNext());
+
+        if (toDelete->getNext() == nullptr)
+        {
+            last_ = current;
+        }
+        
+        delete toDelete;
+        size_--;
+    }
     
     
 
@@ -206,6 +232,12 @@ int main() {
 
     cout << "Size: " << MyList.size() << endl;
     MyList.pop_back();
+    MyList.print();
+
+    MyList.push_back(9);
+    MyList.push_back(2);
+    MyList.print();
+    MyList.remove(2);
     MyList.print();
 
     return 0;
