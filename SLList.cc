@@ -33,6 +33,10 @@ private:
         void setNext(Node* nxt) {
             next_ = nxt;
         }
+
+        void setData(const T& data) {
+            data_ = data;
+        }
     };
 
 private:
@@ -184,6 +188,17 @@ public:
         size_--;
     }
     
+    void modify(unsigned int pos, T d) {
+        if(pos >= size_ || first_ == nullptr) return;
+        Node *current = first_;
+        
+        for (unsigned int i = 0; i < pos; i++)
+        {
+            current = current->getNext();
+        }
+
+        current->setData(d);
+    }
     
 
     void print() {
@@ -240,5 +255,7 @@ int main() {
     MyList.remove(2);
     MyList.print();
 
+    MyList.modify(2, 69);
+    MyList.print();
     return 0;
 }
