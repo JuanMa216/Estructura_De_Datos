@@ -107,12 +107,23 @@ class Vector {
     }
 
     void insert(unsigned int index, T element) {
-        assert(index >= 0 && index < size_);
-        //for (unsigned int i = 0; i <= index; i++)
-        //{
-        //    if (index == i) storage_[i] = element;
-        //}
+        if (index > size_)
+        {
+            throw std::out_of_range("Index out of bounds");
+        }
+
+        if (size_ == capacity_)
+        {
+            resize();
+        }
+
+        for (unsigned int i = size_; i > size_; i--)
+        {
+            storage_[i] = storage_[i-1];
+        }
+        
         storage_[index] = element;
+        size_++;
     }
 
     void print() {
@@ -148,6 +159,8 @@ int main() {
     myVector.insert(1,2);
     myVector.print();
     myVector.insert(2,3);
+    myVector.print();
+    myVector.insert(6,4);
     myVector.print();
     //myVector.insert(3,4);
     //myVector.print();
