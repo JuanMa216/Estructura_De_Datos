@@ -152,7 +152,8 @@ int main() {
     // Test at with valid and invalid indices
     cout << myVector.at(0) << endl; // Expected: 10
     cout << myVector.at(1) << endl; // Expected: 20
-
+    cout << myVector.capacity() << endl;
+    
     myVector.print();
     myVector.insert(0,1);
     myVector.print();
