@@ -32,6 +32,10 @@ class Vector {
     }
 
     public:
+    unsigned int capacity() {
+        return capacity_;
+    }
+
     unsigned int size() {
         return size_;
     }
@@ -102,6 +106,15 @@ class Vector {
         size_--;
     }
 
+    void insert(unsigned int index, T element) {
+        assert(index >= 0 && index < size_);
+        //for (unsigned int i = 0; i <= index; i++)
+        //{
+        //    if (index == i) storage_[i] = element;
+        //}
+        storage_[index] = element;
+    }
+
     void print() {
         for (unsigned int i = 0; i < size_; i++) {
             cout << " " << storage_[i];
@@ -112,20 +125,39 @@ class Vector {
 };
 
 int main() {
-    Vector<int> z(5);
-    for (int i = 0; i < 5; i++)
-    {
-        z.push_front(i);
-    }
     
-    //for (int i = 0; i < 5; i++) {
-    //    z.push_back(i);
-    //}
-    //z.print();
-    //cout << "z: " << z.size() << endl;
-    //z.push_front(5);
-    z.print();
-    z.pop_front();
-    z.print();
+    Vector<int> myVector(3);
+    myVector.push_back(10);
+    myVector.push_back(20);
+    myVector.push_back(30);
+
+    cout << myVector.size() << endl; // Expected: 3
+    cout << myVector.capacity() << endl; // Expected: Initial capacity, e.g., 4 or 8
+
+    // Test pop_back
+    myVector.pop_back();
+    cout << myVector.size() << endl; // Expected: 2
+
+    // Test at with valid and invalid indices
+    cout << myVector.at(0) << endl; // Expected: 10
+    cout << myVector.at(1) << endl; // Expected: 20
+
+    myVector.print();
+    myVector.insert(0,1);
+    myVector.print();
+    myVector.insert(1,2);
+    myVector.print();
+    myVector.insert(2,3);
+    myVector.print();
+    //myVector.insert(3,4);
+    //myVector.print();
+
+    // Border case: Accessing an out-of-bounds index
+    //cout << myVector.at(2) << endl; // Should crash!
+
+    // Border case: pop_back on empty vector
+    //Vector<int> emptyVector;
+    //emptyVector.pop_back(); // should crash!
+
     return 0;
 }
