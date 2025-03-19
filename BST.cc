@@ -263,7 +263,15 @@ public:
         // Caso 2: Nodo con un solo hijo
         else if (current->getLeft() == nullptr || current->getRight() == nullptr)
         {
-            Node *child = (current->getLeft() != nullptr) ? current->getLeft() : current->getRight();
+            Node *child;
+            if (current->getLeft() != nullptr)
+            {
+                child = current->getLeft();
+            }
+            else
+            {
+                child = current->getRight();
+            }
 
             if (p == nullptr)
             {
