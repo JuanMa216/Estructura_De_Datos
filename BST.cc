@@ -294,38 +294,39 @@ public:
         // Caso 3: Nodo con dos hijos
         else
         {
-            // Encontrar el sucesor in-order (mínimo en el subárbol derecho)
             Node *succ = current->getRight();
             Node *psucc = current;
 
-            // Si el sucesor NO es el hijo derecho inmediato, buscar el menor en la rama izquierda
-            if (succ->getLeft() != nullptr)
+            // Buscar el nodo más pequeño en el subárbol derecho
+            while (succ->getLeft() != nullptr)
             {
-                while (succ->getLeft() != nullptr)
-                {
-                    psucc = succ;
-                    succ = succ->getLeft();
-                }
-                psucc->setLeft(succ->getRight()); // Mover los hijos del sucesor
+                psucc = succ;
+                succ = succ->getLeft();
+            }
+
+            // Conectar el hijo derecho del sucesor con su padre
+            if (psucc->getLeft() == succ)
+            {
+                psucc->setLeft(succ->getRight());
             }
             else
             {
                 psucc->setRight(succ->getRight());
             }
 
-            // Reemplazar el nodo a eliminar con el sucesor
+            // Reemplazar `current` con `succ`
             succ->setLeft(current->getLeft());
             succ->setRight(current->getRight());
 
             if (p == nullptr)
             {
-                root = succ; // Si estamos eliminando la raíz
+                root = succ;
             }
             else
             {
                 if (p->getLeft() == current)
                 {
-                    p->setLeft(succ);
+                    parent->setLeft(succ);
                 }
                 else
                 {
@@ -333,7 +334,7 @@ public:
                 }
             }
 
-            delete current; // Liberar memoria
+            delete current; // Eliminar el nodo original
         }
 
         size_--;
