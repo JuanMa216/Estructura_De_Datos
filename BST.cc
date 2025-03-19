@@ -210,12 +210,16 @@ public:
 
     void remove(const T &d)
     {
-        Node *p = nullptr;
-        Node *current = root;
         if (empty())
         {
+            cout << "Tree is empty!" << endl;
             return;
         }
+
+        Node *p = nullptr;
+        Node *current = root;
+
+        // Buscar el nodo a eliminar
         while (current != nullptr && current->getData() != d)
         {
             p = current;
@@ -229,14 +233,19 @@ public:
             }
         }
 
+        // Si el nodo no se encuentra
         if (current == nullptr)
+        {
+            cout << "Node not found!" << endl;
             return;
-        // Case 1: No children
+        }
+
+        // Caso 1: Nodo sin hijos (nodo hoja)
         if (current->getLeft() == nullptr && current->getRight() == nullptr)
         {
             if (p == nullptr)
             {
-                root = nullptr;
+                root = nullptr; // El nodo a eliminar es la raíz
             }
             else
             {
@@ -249,23 +258,16 @@ public:
                     p->setRight(nullptr);
                 }
             }
+            delete current; // Liberar memoria
         }
-        // Case 2: One Child
+        // Caso 2: Nodo con un solo hijo
         else if (current->getLeft() == nullptr || current->getRight() == nullptr)
         {
-            Node *child;
-            if (current->getLeft() == nullptr)
-            {
-                child = current->getRight();
-            }
-            else
-            {
-                child = current->getLeft();
-            }
+            Node *child = (current->getLeft() != nullptr) ? current->getLeft() : current->getRight();
 
             if (p == nullptr)
             {
-                root = child;
+                root = child; // Si el nodo a eliminar es la raíz
             }
             else
             {
@@ -279,36 +281,37 @@ public:
                 }
             }
 
-            delete current;
+            delete current; // Liberar memoria
         }
+        // Caso 3: Nodo con dos hijos
         else
         {
-            // Case 3: Two Children.
-            // Puntero que sigue al sucesor.
+            // Encontrar el sucesor in-order (mínimo en el subárbol derecho)
             Node *succ = current->getRight();
-            // Puntero al padre del sucesor.
             Node *psucc = current;
-            // Buscamos el sucesor.
-            while (succ->getLeft() != nullptr)
+
+            // Si el sucesor NO es el hijo derecho inmediato, buscar el menor en la rama izquierda
+            if (succ->getLeft() != nullptr)
             {
-                psucc = succ;
-                succ = succ->getLeft();
-            }
-            // Movemos los hijos del sucesor.
-            if (psucc->getLeft() == succ)
-            {
-                psucc->setLeft(succ->getRight());
+                while (succ->getLeft() != nullptr)
+                {
+                    psucc = succ;
+                    succ = succ->getLeft();
+                }
+                psucc->setLeft(succ->getRight()); // Mover los hijos del sucesor
             }
             else
             {
                 psucc->setRight(succ->getRight());
             }
-            // Movemos el sucesor a la posición del nodo a borrar.
+
+            // Reemplazar el nodo a eliminar con el sucesor
             succ->setLeft(current->getLeft());
             succ->setRight(current->getRight());
+
             if (p == nullptr)
             {
-                root = succ;
+                root = succ; // Si estamos eliminando la raíz
             }
             else
             {
@@ -321,8 +324,10 @@ public:
                     p->setRight(succ);
                 }
             }
-            delete current;
+
+            delete current; // Liberar memoria
         }
+
         size_--;
     }
 };
