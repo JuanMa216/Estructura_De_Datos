@@ -207,6 +207,124 @@ public:
         size_++;
         return true;
     }
+
+    void remove(const T &d)
+    {
+        Node *p = nullptr;
+        Node *current = root;
+        if (empty())
+        {
+            return;
+        }
+        while (current != nullptr && current->getData() != d)
+        {
+            p = current;
+            if (d < current->getData())
+            {
+                current = current->getLeft();
+            }
+            else
+            {
+                current = current->getRight();
+            }
+        }
+
+        if (current == nullptr)
+            return;
+        // Case 1: No children
+        if (current->getLeft() == nullptr && current->getRight() == nullptr)
+        {
+            if (p == nullptr)
+            {
+                root = nullptr;
+            }
+            else
+            {
+                if (p->getLeft() == current)
+                {
+                    p->setLeft(nullptr);
+                }
+                else
+                {
+                    p->setRight(nullptr);
+                }
+            }
+        }
+        // Case 2: One Child
+        else if (current->getLeft() == nullptr || current->getRight() == nullptr)
+        {
+            Node *child;
+            if (current->getLeft() == nullptr)
+            {
+                child = current->getRight();
+            }
+            else
+            {
+                child = current->getLeft();
+            }
+
+            if (p == nullptr)
+            {
+                root = child;
+            }
+            else
+            {
+                if (p->getLeft() == current)
+                {
+                    p->setLeft(child);
+                }
+                else
+                {
+                    p->setRight(child);
+                }
+            }
+
+            delete current;
+        }
+        else
+        {
+            // Case 3: Two Children.
+            // Puntero que sigue al sucesor.
+            Node *succ = current->getRight();
+            // Puntero al padre del sucesor.
+            Node *psucc = current;
+            // Buscamos el sucesor.
+            while (succ->getLeft() != nullptr)
+            {
+                psucc = succ;
+                succ = succ->getLeft();
+            }
+            // Movemos los hijos del sucesor.
+            if (psucc->getLeft() == succ)
+            {
+                psucc->setLeft(succ->getRight());
+            }
+            else
+            {
+                psucc->setRight(succ->getRight());
+            }
+            // Movemos el sucesor a la posición del nodo a borrar.
+            succ->setLeft(current->getLeft());
+            succ->setRight(current->getRight());
+            if (p == nullptr)
+            {
+                root = succ;
+            }
+            else
+            {
+                if (p->getLeft() == current)
+                {
+                    p->setLeft(succ);
+                }
+                else
+                {
+                    p->setRight(succ);
+                }
+            }
+            delete current;
+        }
+        size_--;
+    }
 };
 
 int main()
@@ -214,19 +332,18 @@ int main()
     cout << "Binary Search Trees!" << endl;
     BST<int> MyTree;
 
+    MyTree.insert(5);
     MyTree.insert(3);
     MyTree.insert(2);
-    MyTree.insert(4);
-    MyTree.insert(5);
     MyTree.insert(1);
+    MyTree.insert(4);
+    MyTree.insert(8);
+    MyTree.insert(6);
+    MyTree.insert(7);
+    MyTree.insert(9);
+    MyTree.insert(10);
     MyTree.print();
-    cout << "Size: " << MyTree.size() << endl;
-    MyTree.findEQ(3);
-    MyTree.findEQ(6);
-    MyTree.findEQ(1);
-    MyTree.add(6);
+    MyTree.remove(5);
     MyTree.print();
-    cout << "Size: " << MyTree.size() << endl;
-    MyTree.findEQ(6);
     return 0;
 }
