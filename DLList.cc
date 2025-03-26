@@ -4,49 +4,59 @@ using namespace std;
 
 template <typename T>
 
-class DLL {
+class DLL
+{
 private:
-    class Node {
-        private:
+    class Node
+    {
+    private:
         T data_;
-        Node* next_;
-        Node* prev_;
+        Node *next_;
+        Node *prev_;
 
-        public:
-        Node() {
+    public:
+        Node()
+        {
             data_ = T();
             prev_ = next_ = nullptr;
         }
 
-        Node(const T& d) {
+        Node(const T &d)
+        {
             data_ = d;
             prev_ = next_ = nullptr;
         }
 
-        T getData() const {
+        T getData() const
+        {
             return data_;
         }
 
-        Node* getNext() const {
+        Node *getNext() const
+        {
             return next_;
         }
 
-        Node* getPrev() const {
+        Node *getPrev() const
+        {
             return prev_;
         }
 
-        void setNext(Node *nxt) {
+        void setNext(Node *nxt)
+        {
             next_ = nxt;
         }
 
-        void setPrev(Node *prv) {
+        void setPrev(Node *prv)
+        {
             prev_ = prv;
         }
 
-        void setData(const T& data) {
+        void setData(const T &data)
+        {
             data_ = data;
         }
-    }; 
+    };
 
 private:
     Node *first_;
@@ -54,7 +64,8 @@ private:
     unsigned int size_;
 
 public:
-    DLL() {
+    DLL()
+    {
         first_ = last_ = nullptr;
         size_ = 0;
     }
@@ -63,38 +74,41 @@ public:
 
     unsigned int size() const { return size_; }
 
-    void print() {
-        Node* current = first_;
+    void print()
+    {
+        Node *current = first_;
         while (current != nullptr)
         {
             cout << current->getData() << " -> ";
             current = current->getNext();
         }
-    cout << "nullptr" << endl;
+        cout << "nullptr" << endl;
     }
 
-    void push_front(const T& d) {
+    void push_front(const T &d)
+    {
         Node *n = new Node(d);
 
         n->setNext(first_);
 
-        if (first_ != nullptr) {
-            first_->setPrev(n);  
+        if (first_ != nullptr)
+        {
+            first_->setPrev(n);
         }
 
         first_ = n;
-        
+
         if (size_ == 0)
         {
             last_ = n;
         }
-        
+
         size_++;
     }
-
 };
 
-int main() {
+int main()
+{
     cout << "Listas Dobles!" << endl;
 
     DLL<int> myList;
@@ -106,4 +120,3 @@ int main() {
 
     return 0;
 }
-    
