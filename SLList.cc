@@ -285,44 +285,8 @@ int main()
     MyList.push_front(3);
     MyList.push_front(2);
     MyList.push_front(1);
-
-    MyList.print();
-    cout << "Size: " << MyList.size() << endl;
-
     MyList.push_back(4);
     MyList.push_back(5);
-
-    MyList.print();
-
-    cout << "Size: " << MyList.size() << endl;
-
-    int x = 5;
-    if (MyList.search(x))
-    {
-        cout << "Se encontró el dato: " << x << endl;
-    }
-    else
-    {
-        cout << "No se ha encontrado el dato: " << x << endl;
-    }
-
-    MyList.insert(100, 1);
-    MyList.print();
-
-    MyList.pop_front();
-    MyList.print();
-
-    cout << "Size: " << MyList.size() << endl;
-    MyList.pop_back();
-    MyList.print();
-
-    MyList.push_back(9);
-    MyList.push_back(2);
-    MyList.print();
-    MyList.remove(2);
-    MyList.print();
-
-    MyList.modify(2, 69);
     MyList.print();
     MyList.reverse_list();
     MyList.print();
