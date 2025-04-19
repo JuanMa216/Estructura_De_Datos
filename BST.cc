@@ -359,5 +359,7 @@ int main()
     MyTree.print();
     MyTree.remove(5);
     MyTree.print();
+    MyTree.remove(6);
+    MyTree.print();
     return 0;
 }
