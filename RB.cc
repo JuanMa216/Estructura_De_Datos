@@ -278,15 +278,15 @@ public:
 
 int main()
 {
-    RB<int> MyRBTree;
-    MyRBTree.insert(3);
-    MyRBTree.insert(4);
-    MyRBTree.insert(5);
-    MyRBTree.insert(1);
-    MyRBTree.insert(2);
-    MyRBTree.print();
-    cout << "Altura: " << MyRBTree.height() << endl;
-    if (MyRBTree.search(1))
+    RB<int> tree;
+    tree.insert(12);
+    tree.insert(15);
+    tree.insert(3);
+    tree.insert(4);
+    tree.insert(2);
+    tree.print();
+    cout << "Altura: " << tree.height() << endl;
+    if (tree.search(1))
     {
         cout << "El valor de 1 ha sido encontrado." << endl;
     }
