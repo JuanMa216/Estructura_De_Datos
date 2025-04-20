@@ -72,7 +72,6 @@ private:
             root->setRight(insert(root->getRight(), data));
         // Balanceamos.
         if (root->getLeft() != nullptr && root->getLeft()->getPriority() > root->getPriority())
-
             root = rotateRight(root);
         else if (root->getRight() != nullptr && root->getRight()->getPriority() > root->getPriority())
             root = rotateLeft(root);

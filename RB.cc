@@ -3,8 +3,8 @@ using namespace std;
 
 enum Color
 {
-    RED,
-    BLACK
+    RED,  // Red = 0
+    BLACK // Black = 1
 };
 
 template <typename T>
@@ -128,24 +128,149 @@ private:
 
     Node *search(const T &data, Node *node)
     {
-        if (empty())
-        {
-            return node;
-        }
+        if (node == nullptr)
+            return nullptr;
 
-        if (node != nullptr || node->getData() == data)
-        {
+        if (data == node->getData())
             return node;
-        }
 
         if (data < node->getData())
-        {
             return search(data, node->getLeft());
+        else
+            return search(data, node->getRight());
+    }
+
+    Node *findMin(Node *n)
+    {
+        while (n != nullptr && n->getLeft() != nullptr)
+            n = n->getLeft();
+        return n;
+    }
+
+    void fixDelete(Node *node)
+    {
+        while (node != root && !isRed(node))
+        {
+            if (node == node->getParent()->getLeft()) // Caso 1: Nodo es hijo izquierdo
+            {
+                Node *sibling = node->getParent()->getRight();
+
+                if (isRed(sibling)) // Caso 1.1: Hermano rojo
+                {
+                    sibling->setColor(BLACK);
+                    node->getParent()->setColor(RED);
+                    rotateLeft(node->getParent());
+                    sibling = node->getParent()->getRight();
+                }
+
+                if (!isRed(sibling->getLeft()) && !isRed(sibling->getRight())) // Caso 1.2: Hermano negro con hijos negros
+                {
+                    sibling->setColor(RED);
+                    node = node->getParent();
+                }
+                else
+                {
+                    if (!isRed(sibling->getRight())) // Caso 1.3: Hermano negro con hijo izquierdo rojo
+                    {
+                        sibling->getLeft()->setColor(BLACK);
+                        sibling->setColor(RED);
+                        rotateRight(sibling);
+                        sibling = node->getParent()->getRight();
+                    }
+
+                    sibling->setColor(node->getParent()->getColor());
+                    node->getParent()->setColor(BLACK);
+                    sibling->getRight()->setColor(BLACK);
+                    rotateLeft(node->getParent());
+                    node = root;
+                }
+            }
+            else // Caso 2: Nodo es hijo derecho (simétrico al caso 1)
+            {
+                Node *sibling = node->getParent()->getLeft();
+
+                if (isRed(sibling)) // Caso 2.1: Hermano rojo
+                {
+                    sibling->setColor(BLACK);
+                    node->getParent()->setColor(RED);
+                    rotateRight(node->getParent());
+                    sibling = node->getParent()->getLeft();
+                }
+
+                if (!isRed(sibling->getLeft()) && !isRed(sibling->getRight())) // Caso 2.2: Hermano negro con hijos negros
+                {
+                    sibling->setColor(RED);
+                    node = node->getParent();
+                }
+                else
+                {
+                    if (!isRed(sibling->getLeft())) // Caso 2.3: Hermano negro con hijo derecho rojo
+                    {
+                        sibling->getRight()->setColor(BLACK);
+                        sibling->setColor(RED);
+                        rotateLeft(sibling);
+                        sibling = node->getParent()->getLeft();
+                    }
+
+                    sibling->setColor(node->getParent()->getColor());
+                    node->getParent()->setColor(BLACK);
+                    sibling->getLeft()->setColor(BLACK);
+                    rotateRight(node->getParent());
+                    node = root;
+                }
+            }
+        }
+
+        node->setColor(BLACK); // El nodo actual debe ser negro para restaurar las propiedades
+    }
+
+    Node *remove(Node *node, const T &d)
+    {
+        if (node == nullptr)
+            return nullptr;
+
+        if (d < node->getData())
+        {
+            node->setLeft(remove(node->getLeft(), d));
+        }
+        else if (d > node->getData())
+        {
+            node->setRight(remove(node->getRight(), d));
         }
         else
         {
-            return search(data, node->getRight());
+            // Caso 1: Hoja.
+            if (node->getLeft() == nullptr && node->getRight() == nullptr)
+            {
+                delete node;
+                size_--;
+                return nullptr;
+            }
+            else if (node->getLeft() == nullptr || node->getRight() == nullptr)
+            { // Caso 2: Un hijo.
+                Node *temp = nullptr;
+                if (node->getLeft() != nullptr)
+                {
+                    temp = node->getLeft();
+                }
+                else
+                {
+                    temp = node->getRight();
+                }
+                temp->setParent(node->getParent());
+                delete node;
+                size_--;
+                return temp;
+            }
+            else if (node->getLeft() != nullptr && node->getRight() != nullptr)
+            { // Caso 3: Dos hijos.
+                Node *minNode = findMin(node->getRight());
+                node->setData(minNode->getData());                            // Copiar Dato.
+                node->setRight(remove(node->getRight(), minNode->getData())); // Eliminar el sucesor.
+            }
         }
+        fixDelete(node);
+        return node;
     }
 
 public:
@@ -274,6 +399,13 @@ public:
     {
         return search(data, root) != nullptr;
     }
+
+    unsigned int size() const { return size_; }
+
+    void remove(const T &d)
+    {
+        root = remove(root, d);
+    }
 };
 
 int main()
@@ -295,5 +427,10 @@ int main()
         cout << "El valor de 1 no ha sido encontrado." << endl;
     }
 
+    cout << "Tamaño: " << tree.size() << endl;
+    tree.remove(15);
+    tree.print();
+    cout << "Altura: " << tree.height() << endl;
+    cout << "Tamaño: " << tree.size() << endl;
     return 0;
 }
