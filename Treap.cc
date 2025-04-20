@@ -63,7 +63,6 @@ private:
     {
         if (root == nullptr)
         {
-            size_++;
             return new Node(data, distrib(gen));
         }
         // Buscamos donde quedará el nuevo nodo.
@@ -77,8 +76,56 @@ private:
             root = rotateRight(root);
         else if (root->getRight() != nullptr && root->getRight()->getPriority() > root->getPriority())
             root = rotateLeft(root);
-
+        size_++;
         return root;
+    }
+
+    Node *remove(Node *node, const T &data)
+    {
+        if (node == nullptr)
+        {
+            return nullptr;
+        }
+
+        if (data < node->getData())
+            node->setLeft(remove(node->getLeft(), data));
+        else if (data > node->getData())
+            node->setRight(remove(node->getRight(), data));
+        else
+        {
+            // Caso 1: Nodo Hoja.
+            if (node->getLeft() == nullptr && node->getRight() == nullptr)
+            {
+                delete node;
+                return nullptr;
+            }
+            else if (node->getLeft() == nullptr || node->getRight() == nullptr)
+            { // Caso 2: Un hijo.
+                Node *temp = nullptr;
+                if (node->getLeft() != nullptr)
+                    temp = node->getLeft();
+                else
+                    temp = node->getRight();
+                delete node;
+                return temp;
+            }
+            else if (node->getLeft() != nullptr && node->getRight() != nullptr)
+            { // Caso 3: Dos hijos.
+                Node *temp = nullptr;
+                if (node->getLeft()->getPriority() > node->getRight()->getPriority())
+                {
+                    node = rotateRight(node);
+                    node->setRight(remove(node->getRight(), data));
+                }
+                else if (node->getRight()->getPriority() >= node->getLeft()->getPriority())
+                {
+                    node = rotateLeft(node);
+                    node->setLeft(remove(node->getLeft(), data));
+                }
+            }
+        }
+        size_--;
+        return node;
     }
 
     void printOrder(Node *node) const
@@ -220,6 +267,13 @@ public:
         int h = height(root);
         return h;
     }
+
+    void remove(const T &d)
+    {
+        root = remove(root, d);
+    }
+
+    unsigned int size() { return size_; }
 };
 
 int main()
@@ -231,11 +285,16 @@ int main()
     Treap.insert(4);
     Treap.insert(5);
     Treap.insert(6);
+    // cout << "Tamaño: " << Treap.size() << endl;
     Treap.printInOrder();
-    Treap.printPreOrder();
-    Treap.IterativePreOrder();
-    Treap.printPostOrder();
-    Treap.printIterativePostOrder();
+    // Treap.printPreOrder();
+    // Treap.IterativePreOrder();
+    // Treap.printPostOrder();
+    // Treap.printIterativePostOrder();
+    cout << "Altura: " << Treap.height() << endl;
+    Treap.remove(1);
+    // cout << "Tamaño: " << Treap.size() << endl;
+    Treap.printInOrder();
     cout << "Altura: " << Treap.height() << endl;
     return 0;
 }
