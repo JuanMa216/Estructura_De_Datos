@@ -1,5 +1,6 @@
 #include <iostream>
 #include <random>
+#include <stack>
 using namespace std;
 
 template <typename T>
@@ -65,12 +66,12 @@ private:
             size_++;
             return new Node(data, distrib(gen));
         }
-        //Buscamos donde quedará el nuevo nodo.
+        // Buscamos donde quedará el nuevo nodo.
         if (data < root->getData())
             root->setLeft(insert(root->getLeft(), data));
         else
             root->setRight(insert(root->getRight(), data));
-        //Balanceamos.
+        // Balanceamos.
         if (root->getLeft() != nullptr && root->getLeft()->getPriority() > root->getPriority())
 
             root = rotateRight(root);
@@ -80,13 +81,81 @@ private:
         return root;
     }
 
-    void printInOrder(Node *node)
+    void printOrder(Node *node) const
     {
         if (node == nullptr)
             return;
-        printInOrder(node->getLeft());
+        printOrder(node->getLeft());
         cout << "(" << node->getData() << ", " << node->getPriority() << ")" << " -> ";
-        printInOrder(node->getRight());
+        printOrder(node->getRight());
+    }
+
+    void PreOrder(Node *node) const
+    {
+        if (node == nullptr)
+            return;
+        cout << "(" << node->getData() << ", " << node->getPriority() << ")" << " -> ";
+        PreOrder(node->getLeft());
+        PreOrder(node->getRight());
+    }
+
+    void iterativePreorder(Node *node) const
+    {
+        if (node == nullptr)
+            return;
+        stack<Node *> st;
+        st.push(node);
+        while (!st.empty())
+        {
+            node = st.top();
+            st.pop();
+            cout << "(" << node->getData() << ", " << node->getPriority() << ")" << " -> ";
+            if (node->getRight() != nullptr)
+                st.push(node->getRight());
+            if (node->getLeft() != nullptr)
+                st.push(node->getLeft());
+        }
+    }
+
+    void PostOrder(Node *node) const
+    {
+        if (node == nullptr)
+            return;
+
+        PostOrder(node->getLeft());
+        PostOrder(node->getRight());
+
+        cout << "(" << node->getData() << ", " << node->getPriority() << ")" << " -> ";
+    }
+
+    void iterativePostOrder(Node *node) const
+    {
+        if (node == nullptr)
+            return;
+        stack<Node *> st;
+        Node *lastNodeVisited = nullptr;
+        while (!st.empty() || node != nullptr)
+        {
+            if (node != nullptr)
+            {
+                st.push(node);
+                node = node->getLeft();
+            }
+            else
+            {
+                Node *peekNode = st.top();
+                if (peekNode->getRight() != nullptr && lastNodeVisited != peekNode->getRight())
+                {
+                    node = peekNode->getRight();
+                }
+                else
+                {
+                    cout << "(" << peekNode->getData() << ", " << peekNode->getPriority() << ")" << " -> ";
+                    lastNodeVisited = st.top();
+                    st.pop();
+                }
+            }
+        }
     }
 
     int height(Node *node)
@@ -106,11 +175,43 @@ public:
         root = insert(root, data);
     }
 
-    void print()
+    void printInOrder() const // left_SubTree->Root->right_SubTree.
     {
         if (empty())
             return;
-        printInOrder(root);
+        printOrder(root);
+        cout << "nullptr" << endl;
+    }
+
+    void printPreOrder() const // Root->left_SubTree->right_SubTree.
+    {
+        if (empty())
+            return;
+        PreOrder(root);
+        cout << "nullptr" << endl;
+    }
+
+    void IterativePreOrder() const
+    {
+        if (empty())
+            return;
+        iterativePreorder(root);
+        cout << "nullptr" << endl;
+    }
+
+    void printPostOrder() const // left_SubTree->right_SubTree->Root.
+    {
+        if (empty())
+            return;
+        PostOrder(root);
+        cout << "nullptr" << endl;
+    }
+
+    void printIterativePostOrder() const
+    {
+        if (empty())
+            return;
+        iterativePostOrder(root);
         cout << "nullptr" << endl;
     }
 
@@ -130,7 +231,11 @@ int main()
     Treap.insert(4);
     Treap.insert(5);
     Treap.insert(6);
-    Treap.print();
+    Treap.printInOrder();
+    Treap.printPreOrder();
+    Treap.IterativePreOrder();
+    Treap.printPostOrder();
+    Treap.printIterativePostOrder();
     cout << "Altura: " << Treap.height() << endl;
     return 0;
 }
