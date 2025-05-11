@@ -4,5 +4,6 @@
     "cmath": "cpp",
     "ostream": "cpp",
     "random": "cpp"
-  }
+  },
+  "C_Cpp.default.compilerPath": "/mnt/c/Users/zoruj/DSA_CPP/Estructura_De_Datos/Vectores.cc"
 }
