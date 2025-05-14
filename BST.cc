@@ -1,4 +1,6 @@
 #include <iostream>
+#include <queue>
+#include <Queue>
 
 using namespace std;
 template <typename T>
@@ -62,6 +64,27 @@ private:
 private:
     Node *root;
     unsigned int size_;
+
+    void levelOrder(Node *node)
+    {
+        if (node == nullptr)
+            return;
+        queue<Node *> Q;
+        Q.push(node);
+        while (!Q.empty())
+        {
+            Node *current = Q.front();
+            Q.pop();
+
+            cout << " " << current->getData();
+
+            if (current->getLeft() != nullptr)
+                Q.push(current->getLeft());
+
+            if (current->getRight() != nullptr)
+                Q.push(current->getRight());
+        }
+    }
 
 public:
     BST()
@@ -339,6 +362,11 @@ public:
 
         size_--;
     }
+
+    void LevelOrderPrint()
+    {
+        levelOrder(root);
+    }
 };
 
 int main()
@@ -361,5 +389,6 @@ int main()
     MyTree.print();
     MyTree.remove(6);
     MyTree.print();
+    MyTree.LevelOrderPrint();
     return 0;
 }
